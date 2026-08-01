@@ -81,12 +81,24 @@
                         <div class="prose-cours !text-sm">{!! Str::markdown($question->statement) !!}</div>
                     </div>
 
-                    {{-- Ce que vous avez écrit --}}
+                    {{-- Ce que vous avez rendu --}}
                     <div class="carte mb-3 px-5 py-4">
                         <p class="mb-2 text-[10px] font-semibold uppercase tracking-[0.1em] texte-faible">Votre copie</p>
+
+                        @if ($question->needs_diagram)
+                            @if (filled($reponse?->diagram['nodes'] ?? null))
+                                <x-schema :value="$reponse->diagram" lecture class="mb-3" />
+                            @else
+                                <p class="mb-3 text-xs italic" style="color: var(--color-lacune-fort)">
+                                    Aucun schéma rendu — c'est exactement ce qui a valu zéro aux trois
+                                    questions de conception en janvier.
+                                </p>
+                            @endif
+                        @endif
+
                         @if (filled($reponse?->answer))
                             <pre class="whitespace-pre-wrap font-mono text-[13px] leading-relaxed texte-doux">{{ $reponse->answer }}</pre>
-                        @else
+                        @elseif (! $question->needs_diagram)
                             <p class="text-xs italic" style="color: var(--color-lacune-fort)">Question non traitée.</p>
                         @endif
                     </div>

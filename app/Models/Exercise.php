@@ -13,7 +13,10 @@ class Exercise extends Model
 
     protected function casts(): array
     {
-        return ['rubric' => 'array'];
+        return [
+            'rubric' => 'array',
+            'needs_diagram' => 'boolean',
+        ];
     }
 
     public const ORIGINS = [

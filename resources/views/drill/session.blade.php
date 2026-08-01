@@ -19,11 +19,12 @@
                 </span>
             @endif
             <span class="ml-auto text-xs texte-faible">{{ $carte->chapter->title }}</span>
+            <x-lire cible="carte-recto" />
         </div>
 
         {{-- Recto --}}
         <section class="carte-haute px-6 py-10 text-center">
-            <div class="prose-cours mx-auto max-w-xl !text-left">{!! Str::markdown($carte->front) !!}</div>
+            <div id="carte-recto" class="prose-cours mx-auto max-w-xl !text-left">{!! Str::markdown($carte->front) !!}</div>
 
             @if ($carte->hint)
                 <button type="button" data-devoiler="indice-carte"
@@ -44,7 +45,10 @@
 
         <section id="verso-carte" hidden class="mt-4">
             <div class="carte px-6 py-6" style="border-color: var(--accent)">
-                <div class="prose-cours">{!! Str::markdown($carte->back) !!}</div>
+                <div id="carte-verso" class="prose-cours">{!! Str::markdown($carte->back) !!}</div>
+                <div class="mt-3 border-t bord pt-2.5">
+                    <x-lire cible="carte-verso" />
+                </div>
             </div>
 
             <p class="mt-5 text-center text-xs texte-doux">Sans complaisance : avez-vous produit cette réponse, ou l'avez-vous reconnue ?</p>

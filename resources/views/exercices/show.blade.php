@@ -23,8 +23,11 @@
 
         {{-- Énoncé --}}
         <section class="carte-haute mb-5 px-6 py-5">
-            <h2 class="mb-3 text-[11px] font-semibold uppercase tracking-[0.1em] texte-faible">Énoncé</h2>
-            <div class="prose-cours">{!! Str::markdown($exercice->statement) !!}</div>
+            <div class="mb-3 flex items-center justify-between gap-3">
+                <h2 class="text-[11px] font-semibold uppercase tracking-[0.1em] texte-faible">Énoncé</h2>
+                <x-lire cible="enonce-exo" :vitesse="true" />
+            </div>
+            <div id="enonce-exo" class="prose-cours">{!! Str::markdown($exercice->statement) !!}</div>
         </section>
 
         <form method="POST" action="{{ route('exercices.soumettre', $exercice) }}">
@@ -32,10 +35,22 @@
             <input type="hidden" name="reveal_level" value="0" data-niveau-devoile>
             <input type="hidden" name="duree" value="0" id="duree-exo">
 
+            {{-- Diagramme de classes, quand l'exercice l'exige --}}
+            @if ($exercice->needs_diagram)
+                <section class="mb-5">
+                    <label class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.1em] texte-faible">
+                        Votre diagramme de classes
+                    </label>
+                    <x-schema name="diagram" :value="$derniere?->diagram" />
+                </section>
+            @endif
+
             {{-- Rédaction --}}
             <section class="mb-5">
                 <label for="answer" class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.1em] texte-faible">
-                    Votre réponse — rédigez comme sur une copie
+                    {{ $exercice->needs_diagram
+                        ? 'Justification — une ligne par patron identifié'
+                        : 'Votre réponse — rédigez comme sur une copie' }}
                 </label>
                 <textarea id="answer" name="answer" rows="10"
                           class="champ font-mono text-[13px] leading-relaxed"

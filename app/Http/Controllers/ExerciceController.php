@@ -55,6 +55,7 @@ class ExerciceController extends Controller
     {
         $data = $request->validate([
             'answer' => ['nullable', 'string', 'max:50000'],
+            'diagram' => ['nullable', 'string', 'max:200000'],
             'reveal_level' => ['required', 'integer', 'between:0,3'],
             'rubric' => ['nullable', 'array'],
             'rubric.*' => ['nullable'],
@@ -86,6 +87,7 @@ class ExerciceController extends Controller
         ExerciseAttempt::create([
             'exercise_id' => $exercise->id,
             'answer' => $data['answer'] ?? null,
+            'diagram' => json_decode($data['diagram'] ?? '', true) ?: null,
             'reveal_level' => $data['reveal_level'],
             'rubric_check' => $coches,
             'self_score' => $score,

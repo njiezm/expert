@@ -15,6 +15,7 @@ class MockExamQuestion extends Model
         return [
             'rubric' => 'array',
             'points' => 'decimal:2',
+            'needs_diagram' => 'boolean',
         ];
     }
 

@@ -13,6 +13,7 @@ class ExerciseAttempt extends Model
     {
         return [
             'rubric_check' => 'array',
+            'diagram' => 'array',
             'completed_at' => 'datetime',
         ];
     }

@@ -17,31 +17,41 @@
                     <x-icone name="check" class="size-3" /> Déjà parcourue
                 </span>
             @endif
+
+            {{-- Lecture de la fiche entière, avec réglage de vitesse. --}}
+            <x-lire cible="fiche-entiere" label="Écouter la fiche" :vitesse="true" class="ml-auto" />
         </div>
+
+        <div id="fiche-entiere" class="contents">
 
         {{-- Les cinq temps de la fiche, dans l'ordre : on ne saute pas l'intuition
              pour aller au formalisme, et on ne quitte pas la fiche sans avoir lu
              ce que le correcteur attend. --}}
         @foreach ($lesson->sections() as $i => $section)
+            @php $accent = $section['key'] === 'examiner_expects'; @endphp
             <section class="mb-4">
                 <div class="mb-2.5 flex items-center gap-2">
                     <span class="grid size-6 shrink-0 place-items-center rounded-md"
-                          style="background: {{ $section['key'] === 'examiner_expects' ? 'var(--accent-doux)' : 'var(--surface-haute)' }}">
+                          style="background: {{ $accent ? 'var(--accent-doux)' : 'var(--surface-haute)' }}">
                         <x-icone :name="$section['icon']" class="size-3.5"
-                                 style="color: {{ $section['key'] === 'examiner_expects' ? 'var(--accent)' : 'var(--texte-doux)' }}" />
+                                 style="color: {{ $accent ? 'var(--accent)' : 'var(--texte-doux)' }}" />
                     </span>
                     <h2 class="text-[13px] font-semibold uppercase tracking-[0.08em]"
-                        style="color: {{ $section['key'] === 'examiner_expects' ? 'var(--accent)' : 'var(--texte-doux)' }}">
+                        style="color: {{ $accent ? 'var(--accent)' : 'var(--texte-doux)' }}">
                         {{ $section['label'] }}
                     </h2>
+                    <x-lire :cible="'section-'.$section['key']" class="ml-auto" />
                 </div>
 
-                <div class="carte px-5 py-4 {{ $section['key'] === 'examiner_expects' ? 'border-l-2' : '' }}"
-                     @if ($section['key'] === 'examiner_expects') style="border-left-color: var(--accent)" @endif>
+                <div id="section-{{ $section['key'] }}"
+                     class="carte px-5 py-4 {{ $accent ? 'border-l-2' : '' }}"
+                     @if ($accent) style="border-left-color: var(--accent)" @endif>
                     <div class="prose-cours">{!! Str::markdown($section['body']) !!}</div>
                 </div>
             </section>
         @endforeach
+
+        </div>
 
         @if (empty($lesson->sections()))
             <x-vide icon="book" titre="Fiche vide">Le contenu de cette fiche reste à générer.</x-vide>

@@ -3,6 +3,9 @@
    Pas de framework : quelques comportements attachés par attribut de données.
    ========================================================================== */
 
+import { initVoix } from './voix.js';
+import { initSchemas } from './schema.js';
+
 /* -------- Bascule de thème --------------------------------------------
    Le clair est la valeur par défaut ; le sombre s'active par la classe
    `theme-sombre` sur <html> et se mémorise en local.                      */
@@ -120,4 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-chrono-fin]').forEach(demarrerChrono);
     document.querySelectorAll('[data-brouillon]').forEach(activerBrouillon);
     document.querySelectorAll('[data-auto-hauteur]').forEach(autoHauteur);
+    initVoix();
+    initSchemas();
 });

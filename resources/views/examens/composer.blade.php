@@ -58,14 +58,26 @@
                 </div>
 
                 <div class="carte mb-3 px-5 py-4">
-                    <div class="prose-cours">{!! Str::markdown($question->statement) !!}</div>
+                    <div id="enonce-q{{ $question->id }}" class="prose-cours">{!! Str::markdown($question->statement) !!}</div>
+                    <div class="mt-3 border-t bord pt-2.5">
+                        <x-lire :cible="'enonce-q'.$question->id" />
+                    </div>
                 </div>
+
+                @if ($question->needs_diagram)
+                    <div class="mb-3">
+                        <x-schema :name="'schemas['.$question->id.']'"
+                                  :value="$reponses[$question->id]->diagram ?? null" />
+                    </div>
+                @endif
 
                 <textarea name="reponses[{{ $question->id }}]" rows="8"
                           class="champ font-mono text-[13px] leading-relaxed"
                           data-brouillon="exam-{{ $session->id }}-q{{ $question->id }}"
                           data-auto-hauteur
-                          placeholder="Votre réponse…">{{ $reponses[$question->id]->answer ?? '' }}</textarea>
+                          placeholder="{{ $question->needs_diagram
+                              ? 'Justification — une ligne par patron identifié sur le schéma…'
+                              : 'Votre réponse…' }}">{{ $reponses[$question->id]->answer ?? '' }}</textarea>
             </section>
         @endforeach
 

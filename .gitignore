@@ -14,6 +14,8 @@
 /.zed
 /auth.json
 /node_modules
+# Le dump brut n'est pas versionné : seule l'archive zip l'est (voir database/dumps).
+/database/dumps/*.sql
 # public/build est volontairement versionné : l'hébergement mutualisé n'a pas Node,
 # les assets sont donc compilés en local puis déployés avec le code.
 # /public/build

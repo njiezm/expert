@@ -19,6 +19,9 @@ class IngestDocuments extends Command
 
     protected $description = 'Indexe les polycopiés de public/pdfs et en extrait le texte';
 
+    /** Résultat mis en cache de la détection de Poppler. */
+    private ?bool $poppler = null;
+
     public function handle(DocumentClassifier $classifier): int
     {
         $root = public_path(config('meridien.pdf_root'));
@@ -128,9 +131,42 @@ class IngestDocuments extends Command
         }
     }
 
+    /**
+     * Poppler est-il disponible ?
+     *
+     * Sur un hébergement mutualisé, pdftotext et pdfinfo sont rarement installés.
+     * L'indexation doit rester possible sans eux : on perd l'extraction du texte,
+     * pas la bibliothèque.
+     */
+    private function popplerDisponible(): bool
+    {
+        if ($this->poppler !== null) {
+            return $this->poppler;
+        }
+
+        try {
+            Process::timeout(10)->run([config('meridien.pdftotext'), '-v']);
+            $this->poppler = true;
+        } catch (\Throwable) {
+            $this->poppler = false;
+            $this->warn('pdftotext introuvable : les documents seront indexés sans extraction de texte.');
+            $this->line('  La recherche plein texte restera vide tant que le binaire ne sera pas disponible.');
+        }
+
+        return $this->poppler;
+    }
+
     private function pageCount(string $path): ?int
     {
-        $result = Process::run([config('meridien.pdfinfo'), $path]);
+        if (! $this->popplerDisponible()) {
+            return null;
+        }
+
+        try {
+            $result = Process::timeout(30)->run([config('meridien.pdfinfo'), $path]);
+        } catch (\Throwable) {
+            return null;
+        }
 
         if (! $result->successful()) {
             return null;
@@ -141,10 +177,18 @@ class IngestDocuments extends Command
 
     private function extractText(string $path): string
     {
-        // -enc UTF-8 est indispensable : sans lui les accents ressortent en Latin-1.
-        $result = Process::timeout(120)->run([
-            config('meridien.pdftotext'), '-enc', 'UTF-8', '-layout', '-nopgbrk', $path, '-',
-        ]);
+        if (! $this->popplerDisponible()) {
+            return '';
+        }
+
+        try {
+            // -enc UTF-8 est indispensable : sans lui les accents ressortent en Latin-1.
+            $result = Process::timeout(120)->run([
+                config('meridien.pdftotext'), '-enc', 'UTF-8', '-layout', '-nopgbrk', $path, '-',
+            ]);
+        } catch (\Throwable) {
+            return '';
+        }
 
         return $result->successful() ? $result->output() : '';
     }

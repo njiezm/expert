@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
             DiagnosticApprofondiSeeder::class,
             DiagnosticApprofondi2Seeder::class,
             SecondsExamensBlancsSeeder::class,
+            ActiverSchemasSeeder::class,
         ]);
     }
 }

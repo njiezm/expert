@@ -89,6 +89,7 @@ class ExamenBlancController extends Controller
     {
         if ($session->isRunning()) {
             $reponses = $request->input('reponses', []);
+            $schemas = $request->input('schemas', []);
 
             foreach ($session->mockExam->questions as $question) {
                 MockExamAnswer::updateOrCreate(
@@ -96,7 +97,10 @@ class ExamenBlancController extends Controller
                         'mock_exam_session_id' => $session->id,
                         'mock_exam_question_id' => $question->id,
                     ],
-                    ['answer' => $reponses[$question->id] ?? null]
+                    [
+                        'answer' => $reponses[$question->id] ?? null,
+                        'diagram' => json_decode($schemas[$question->id] ?? '', true) ?: null,
+                    ]
                 );
             }
 

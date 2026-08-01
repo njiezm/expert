@@ -13,6 +13,7 @@ class MockExamAnswer extends Model
     {
         return [
             'rubric_check' => 'array',
+            'diagram' => 'array',
             'points_awarded' => 'decimal:2',
         ];
     }
