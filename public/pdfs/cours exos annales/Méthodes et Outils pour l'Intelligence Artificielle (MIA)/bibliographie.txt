@@ -1,0 +1,17 @@
+
+Bibliographie
+Conditions d’achèvement
+Voici quelques références d'ouvrages ayant servi dans la conception de ce cours ou traitant des concepts abordés dans celui-ci :
+
+"Approche logique de l'intelligence Artificielle" - 4 Tomes de André Thayse et al. aux éditions Dunod
+"Intelligence Artificielle" de Stuart Russel et Peter Norviq aux éditions Pearson.
+"Panorama de l'intelligence artificielle" - 3 tomes de Pierre Marquis, Odile Papini et Henri Prade, aux éditions Cepadues.
+"Programming with constraints" de Kimbal Marriott and Peter .J. Stuckey, aux éditions MIT Press
+"Prolog Programming for Artificial Intelligence" de Yvan Bratko, aux éditions Addison & Wesley
+"Outils logique pour l'intelligence artificielle" de Jean-Paul Delahaye, aux éditions Eyrolles
+"Reasoning about knowledge" de Ronald Fagin et al., aux éditions MIT Press
+"Systèmes Experts : Méthodes et outils" de Jean-Marc Chatain et Alain Dussauchoy, aux éditions Eyrolles
+"Artificial Intelligence and Machine Learning Fundamentals" de Zsolt Nagy aux editions Packt Publishing (e-book disponible sur scholarvox sur le site web de la BU).
+"Intelligence artificielle : vers une domination programmée ?" de Jean-Gabriel Ganascia aux éditions Le Cavalier Bleu Editions (e-book disponible sur scholarvox sur le site web de la BU).
+"Logique et langage : déduction naturelle" de Jean-Pierre Desclés, Brahim Djioua et Florence Le Priol aux éditions Hermann (e-book disponible sur scholarvox sur le site web de la BU).
+Modifié le: jeudi 3 octobre 2024, 18:19

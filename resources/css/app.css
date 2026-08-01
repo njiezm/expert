@@ -1,0 +1,353 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+/* ==========================================================================
+   MÉRIDIEN — système de design
+   --------------------------------------------------------------------------
+   Le méridien est la ligne qui relie Besançon à la Martinique, les deux
+   salles d'examen, et le point de passage au zénith. Cinq nœuds sur l'arc :
+   les cinq matières. Le mode sombre est le mode par défaut — le travail se
+   fait le soir et la nuit.
+   ========================================================================== */
+
+@theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-serif: 'Source Serif 4', ui-serif, Georgia, serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
+
+    /* Nuit — la base */
+    --color-nuit-950: #070c16;
+    --color-nuit-900: #0b1220;
+    --color-nuit-850: #0f1728;
+    --color-nuit-800: #111a2b;
+    --color-nuit-700: #16223a;
+    --color-nuit-600: #1d2c48;
+    --color-nuit-500: #223049;
+    --color-nuit-400: #35486a;
+
+    /* Or ambré — la progression, l'accent de marque */
+    --color-or-500: #e8b04b;
+    --color-or-400: #f0c26f;
+    --color-or-600: #cf9631;
+    --color-or-300: #f7dba7;
+
+    /* Sémantique */
+    --color-acquis: #5fa88a;
+    --color-acquis-fort: #7cc3a4;
+    --color-lacune: #c6533f;
+    --color-lacune-fort: #e0715d;
+    --color-alerte: #d98b3a;
+    --color-info: #4a7fc1;
+
+    /* Teintes de matière */
+    --color-alo: #e8b04b;
+    --color-ep: #4a7fc1;
+    --color-agc: #3f9e8c;
+    --color-spp: #c6533f;
+    --color-mia: #7c6bd6;
+    --color-rig: #8fa3b8;
+}
+
+/* --------------------------------------------------------------------------
+   Jetons de thème. Le clair est la valeur par défaut ; `.theme-sombre` sur
+   <html> bascule l'ensemble sans toucher au balisage.
+   -------------------------------------------------------------------------- */
+:root {
+    --fond: #f7f8fb;
+    --fond-voile: #eef1f6;
+    --surface: #ffffff;
+    --surface-haute: #ffffff;
+    --surface-survol: #f1f4f9;
+    --bordure: #dde3ec;
+    --bordure-douce: #e9edf3;
+    --texte: #1d2739;
+    --texte-fort: #0b1220;
+    --texte-doux: #55637a;
+    --texte-faible: #7d8a9e;
+    --accent: #a8711a;
+    --accent-doux: color-mix(in oklab, #a8711a 11%, transparent);
+    /* Couleur du texte posé sur l'accent : l'or clair porte du texte sombre,
+       l'or foncé du mode clair porte du blanc. */
+    --accent-contraste: #ffffff;
+    --accent-survol: #8f5f14;
+    --ombre: 0 1px 2px rgb(16 24 40 / 0.05), 0 8px 24px -8px rgb(16 24 40 / 0.1);
+}
+
+/* En clair, les teintes sémantiques doivent être assombries : les versions
+   pensées pour le fond nuit passent sous le seuil de contraste sur du blanc. */
+:root {
+    --color-acquis: #3f8768;
+    --color-acquis-fort: #2f7357;
+    --color-lacune: #b8442f;
+    --color-lacune-fort: #a13a27;
+    --color-alerte: #b4701f;
+    --color-info: #2f6bb0;
+}
+
+html.theme-sombre {
+    --fond: var(--color-nuit-900);
+    --fond-voile: var(--color-nuit-950);
+    --surface: var(--color-nuit-800);
+    --surface-haute: var(--color-nuit-700);
+    --surface-survol: var(--color-nuit-600);
+    --bordure: var(--color-nuit-500);
+    --bordure-douce: var(--color-nuit-600);
+    --texte: #e6eaf2;
+    --texte-fort: #f6f8fc;
+    --texte-doux: #8fa3b8;
+    --texte-faible: #64748b;
+    --accent: var(--color-or-500);
+    --accent-doux: color-mix(in oklab, var(--color-or-500) 16%, transparent);
+    --accent-contraste: #12161f;
+    --accent-survol: var(--color-or-400);
+    --ombre: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -8px rgb(0 0 0 / 0.5);
+
+    --color-acquis: #5fa88a;
+    --color-acquis-fort: #7cc3a4;
+    --color-lacune: #c6533f;
+    --color-lacune-fort: #e0715d;
+    --color-alerte: #d98b3a;
+    --color-info: #4a7fc1;
+}
+
+/* Mode « épreuve nocturne » : reproduit les conditions de l'examen à distance.
+   Contraste abaissé, dominante chaude — on s'habitue à lire dans cet état.
+   Il ne dépend pas de la bascule clair/sombre : il pose ses propres jetons. */
+html.mode-nuit-profonde {
+    --fond: #05080f;
+    --fond-voile: #03060b;
+    --surface: #0a0f18;
+    --surface-haute: #0e141f;
+    --surface-survol: #141c2a;
+    --bordure: #1c2635;
+    --bordure-douce: #151d29;
+    --texte: #cdd6e3;
+    --texte-fort: #e4eaf3;
+    --texte-doux: #6b7c91;
+    --texte-faible: #55647a;
+    --accent: #d99b3f;
+    --accent-doux: color-mix(in oklab, #d99b3f 14%, transparent);
+    --accent-contraste: #0a0f18;
+    --accent-survol: #e8ad57;
+    --ombre: 0 1px 2px rgb(0 0 0 / 0.6), 0 8px 24px -8px rgb(0 0 0 / 0.7);
+
+    --color-acquis: #5fa88a;
+    --color-acquis-fort: #7cc3a4;
+    --color-lacune: #c6533f;
+    --color-lacune-fort: #e0715d;
+    --color-alerte: #d98b3a;
+    --color-info: #4a7fc1;
+}
+
+@layer base {
+    html {
+        color-scheme: light;
+        scrollbar-color: var(--bordure) transparent;
+    }
+
+    html.theme-sombre,
+    html.mode-nuit-profonde {
+        color-scheme: dark;
+    }
+
+    body {
+        background-color: var(--fond);
+        color: var(--texte);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection {
+        background-color: var(--accent-doux);
+        color: var(--texte-fort);
+    }
+
+    h1, h2, h3, h4 {
+        color: var(--texte-fort);
+        letter-spacing: -0.011em;
+    }
+
+    /* Le contenu de cours est en serif : on y reste longtemps. */
+    .prose-cours {
+        font-family: var(--font-serif);
+        font-size: 1.0625rem;
+        line-height: 1.75;
+        color: var(--texte);
+    }
+
+    .prose-cours p + p { margin-top: 0.9em; }
+    .prose-cours strong { color: var(--texte-fort); font-weight: 600; }
+    .prose-cours ul { list-style: disc; padding-left: 1.35em; margin: 0.7em 0; }
+    .prose-cours ol { list-style: decimal; padding-left: 1.35em; margin: 0.7em 0; }
+    .prose-cours li + li { margin-top: 0.35em; }
+    .prose-cours code {
+        font-family: var(--font-mono);
+        font-size: 0.875em;
+        background: var(--surface-haute);
+        border: 1px solid var(--bordure-douce);
+        border-radius: 0.3em;
+        padding: 0.1em 0.35em;
+    }
+    .prose-cours pre {
+        font-family: var(--font-mono);
+        font-size: 0.8125rem;
+        line-height: 1.6;
+        background: var(--fond-voile);
+        border: 1px solid var(--bordure);
+        border-radius: 0.6rem;
+        padding: 0.9rem 1rem;
+        overflow-x: auto;
+        margin: 1em 0;
+    }
+    .prose-cours pre code { background: none; border: 0; padding: 0; }
+    .prose-cours blockquote {
+        border-left: 2px solid var(--accent);
+        padding-left: 0.9em;
+        color: var(--texte-doux);
+        font-style: italic;
+        margin: 1em 0;
+    }
+}
+
+@layer components {
+    .carte {
+        background-color: var(--surface);
+        border: 1px solid var(--bordure);
+        border-radius: 0.875rem;
+    }
+
+    .carte-haute {
+        background-color: var(--surface-haute);
+        border: 1px solid var(--bordure);
+        border-radius: 0.875rem;
+        box-shadow: var(--ombre);
+    }
+
+    .champ {
+        background-color: var(--fond-voile);
+        border: 1px solid var(--bordure);
+        border-radius: 0.5rem;
+        color: var(--texte);
+        padding: 0.55rem 0.75rem;
+        width: 100%;
+        transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .champ:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-doux);
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0.55rem 1rem;
+        border: 1px solid transparent;
+        cursor: pointer;
+        transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+        white-space: nowrap;
+    }
+
+    .btn-accent {
+        background-color: var(--accent);
+        color: var(--accent-contraste);
+        font-weight: 600;
+    }
+    .btn-accent:hover { background-color: var(--accent-survol); }
+
+    .btn-fantome {
+        border-color: var(--bordure);
+        color: var(--texte);
+        background-color: transparent;
+    }
+    .btn-fantome:hover { background-color: var(--surface-survol); }
+
+    .btn-doux {
+        background-color: var(--surface-haute);
+        border-color: var(--bordure);
+        color: var(--texte);
+    }
+    .btn-doux:hover { background-color: var(--surface-survol); }
+
+    .puce {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        border-radius: 999px;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        padding: 0.2rem 0.55rem;
+        border: 1px solid var(--bordure);
+        color: var(--texte-doux);
+    }
+
+    /* Barre de maîtrise : la mesure de l'objectif « 100 % ». */
+    .jauge {
+        height: 0.375rem;
+        border-radius: 999px;
+        background-color: var(--fond-voile);
+        overflow: hidden;
+    }
+    .jauge > span {
+        display: block;
+        height: 100%;
+        border-radius: 999px;
+        transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    /* Lien de navigation latérale */
+    .nav-lien {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        border-radius: 0.5rem;
+        padding: 0.5rem 0.7rem;
+        font-size: 0.875rem;
+        color: var(--texte-doux);
+        transition: background-color 0.15s, color 0.15s;
+    }
+    .nav-lien:hover { background-color: var(--surface-haute); color: var(--texte); }
+    .nav-lien[aria-current='page'] {
+        background-color: var(--accent-doux);
+        color: var(--texte-fort);
+        font-weight: 600;
+    }
+}
+
+@layer utilities {
+    .texte-doux { color: var(--texte-doux); }
+    .texte-faible { color: var(--texte-faible); }
+    .texte-fort { color: var(--texte-fort); }
+    .bord { border-color: var(--bordure); }
+    .tabulaire { font-variant-numeric: tabular-nums; }
+
+    /* Chronomètre d'examen : chiffres de largeur fixe, pas de sautillement. */
+    .chrono {
+        font-family: var(--font-mono);
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.02em;
+    }
+
+    @keyframes pulsation-alerte {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.45; }
+    }
+    .alerte-temps { animation: pulsation-alerte 1.1s ease-in-out infinite; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}

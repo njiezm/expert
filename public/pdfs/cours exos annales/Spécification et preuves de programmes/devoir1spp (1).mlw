@@ -1,0 +1,89 @@
+(* N'jie Zamon *)
+
+theory Ex2
+  predicate p
+  predicate q
+  predicate r
+
+  goal contradiction:
+    (p \/ q) ->
+    (not q \/ r) ->
+    (p \/ not r) ->
+    (not p \/ q) ->
+    (not p \/ not q) ->
+    false
+end
+
+theory Ex3
+  type t
+  predicate s t t
+  constant a : t
+  constant b : t
+
+  goal formule1:
+    (forall z:t. s a z) -> exists u:t. s u b
+
+  goal formule2:
+    (forall z:t. s a z) -> s a b
+end
+
+theory Ex4
+  (* Type inductif pour les formules propositionnelles *)
+  type pf 'a = 
+    | V 'a 
+    | F 
+    | Vrai 
+    | Non (pf 'a) 
+    | Et (pf 'a) (pf 'a) 
+    | Ou (pf 'a) (pf 'a) 
+    | Imp (pf 'a) (pf 'a) 
+    | Equiv (pf 'a) (pf 'a)
+
+  use int.Int
+
+  (* 1. Taille de la formule (nombre total de noeuds) *)
+  let rec function taille (f: pf 'a) : int =
+    match f with
+    | V _ | F | Vrai -> 1
+    | Non f1 -> 1 + taille f1
+    | Et f1 f2 | Ou f1 f2 | Imp f1 f2 | Equiv f1 f2 -> 1 + taille f1 + taille f2
+    end
+
+  (* 2. Nombre d'atomes (variables) dans la formule *)
+  let rec function nb_at (f: pf 'a) : int =
+    match f with
+    | V _ -> 1
+    | F | Vrai -> 0
+    | Non f1 -> nb_at f1
+    | Et f1 f2 | Ou f1 f2 | Imp f1 f2 | Equiv f1 f2 -> nb_at f1 + nb_at f2
+    end
+end
+
+theory Ex5
+  (* Arbres binaires avec donnees sur les noeuds internes uniquement *)
+  type arbre 'a = 
+    | Feuille 
+    | Noeud (arbre 'a) 'a (arbre 'a)
+end
+
+theory Ex6
+  use int.Int
+  use array.Array
+
+  (* 1. Chaque element est egal au suivant *)
+  predicate nextSame (t: array int) =
+    forall i. 0 <= i < length t - 1 -> t[i] = t[i+1]
+
+  (* 2. Debut croissant jusqu'a i inclus, puis decroissant *)
+  predicate croissante_decroissante (t: array int) (i: int) =
+    0 <= i < length t /\
+    (forall j k. 0 <= j <= k <= i -> t[j] <= t[k]) /\
+    (forall j k. i <= j <= k < length t -> t[j] >= t[k])
+
+  (* 3. Longueur paire et alternance 0, 1 (sans mod) *)
+  predicate alternance_zero_un (t: array int) =
+    let n = length t in
+    (exists k. n = 2 * k) /\
+    (forall j. 0 <= 2*j < n -> t[2*j] = 0) /\
+    (forall j. 0 <= 2*j + 1 < n -> t[2*j+1] = 1)
+end

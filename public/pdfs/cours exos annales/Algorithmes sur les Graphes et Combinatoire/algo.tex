@@ -1,0 +1,119 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage [utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fullpage}
+
+\usepackage[lined,longend,algoruled,titlenumbered,french]{algorithm2e}
+
+\begin{document}
+
+\begin{algorithm}[H]
+  \DontPrintSemicolon
+  $u$, $v$ : sommet courant et son voisin, initialisés à 0\;
+  $symetrique$ : booléen indiquant si le graphe est symétrique,
+  initialisé à VRAI \;
+  $N$, $M$ : le nombre de sommets et d'arcs du graphe $G$ \;
+  $FS$ : tableau des successeurs ou file des successeurs
+  ($0..N+M-1$) \;
+  $APS$ : tableau des adresses des premiers successeurs
+  ($0..N-1$)\; %($APS[N+1] = n+m+1$)\;
+  \BlankLine
+  \textbf{Fonction \texttt{grapheSymetrique(FS,APS)} : } \;
+  \Deb {    
+    $i \gets 0 $ \tcc*{indice de parcours de FS}
+    $u \gets 0$\;
+    \Tq{$symetrique \wedge (i < N+M-1$)}{
+      \eSi{$FS[i] \neq -1$}{
+        $v \gets FS[i]$ \tcc{voisin de \texttt{u}}
+        $j \gets APS[v]$ \tcc{indice du premier voisin
+          de $v$ dans $FS$}
+        $symetrique \gets FAUX$  \;
+        \Tq{$\neg symetrique \wedge FS[j] \neq -1$}{
+          \Si{$FS[j] = u$}{
+            $symetrique \gets VRAI$ \;
+          } %fsi
+          $j++$
+        } %ftq
+      } { $u++$ } % fsi
+      $i++$\;
+    } %ftq
+  } % fin
+  \Retour{$symetrique$}
+  \caption{Algorithme de vérification de la symétrie du graphe $G$
+    codé avec FS/APS}
+  \label{algo:symetrique}
+\end{algorithm}
+
+
+\begin{algorithm}[H]
+  \DontPrintSemicolon
+  $u$: sommet courant, initialisé à 0\;
+  $N$, $M$ : le nombre de sommets et d'arcs du graphe $G$ \;
+  $nbSuccesseurs$: nombre de successeurs par sommet \;
+  \BlankLine
+  \textbf{Fonction $calculNbSuccesseurs(FS,APS)$ : } \;
+  \Deb {  
+    \Pour{$i$ de 0 à $N-1$}{
+      $nbSuccesseur[i] \gets 0$ \;
+    }
+    $u \gets 0$ \;
+    \Pour{$i$ de 0 à $N+M-1$}{
+      \eSi{$FS[i] \neq -1$}{
+        $nbSuccesseurs[u]++$ \;
+        $nbSuccesseurs[FS[i]]++$
+      }{
+        $u ++$ \;
+      }
+    } % fpour
+  } % fin
+  \Retour{$nbSuccesseurs$}
+  \caption{Fonction de calcul du nombre de successeurs par sommets}
+  \label{algo:nbsuccesseurs}
+\end{algorithm}
+
+\begin{algorithm}[H]
+  \small
+  \DontPrintSemicolon
+  $u$, $v$: sommets de l'arc courant\;
+  $N$, $M$ : le nombre de sommets et d'arcs du graphe $G$ \;
+  $FSS$ : $FS$ pour le graphes symétrique\;
+  $APSS$ : $APS$ pour le graphe symétrique\;
+  \BlankLine
+  \textbf{Fonction $rendSymetrique(FS,APS)$ : } \;
+  \Deb {  
+    $nbSuccesseurs \gets calculNbSuccesseurs(FS,APS)$\;
+    \BlankLine
+    $APSS[0] \gets 0$ \;
+    \Pour{$u$ de 1 à $N-1$}{
+      $APSS[u] \gets APSS[u-1] + nbSuccesseurs[u-1] + 1$ \;
+      $FSS[APSS[u]-1] \gets -1$ \;
+    } % fpour
+    $FSS[N+2M-1] \gets -1$ \;
+    \BlankLine
+    \Pour{$u$ de 0 à $N-1$}{
+      $suivant[u] \gets 0$\;
+    }
+    \BlankLine
+    $u \gets 0 $\;
+    \Pour{$i$ de 0 à $N+M-1$}{
+      \eSi{$FS[i] \neq -1$}{
+        $v \gets FS[i]$ \;
+        $FSS[APSS[u]+suivant[u]] \gets v$\;
+        $suivant[u] ++$ \;
+        \tcc{ajout des arcs symétriques}
+        $FSS[APSS[v]+suivant[v] \gets u$\; 
+        $suivant[v] ++$ \;
+      }{ % else 
+        $u ++$ \;
+      } % fsi
+    } % fpour
+  } % fin
+  \Retour{$APSS$ et $FSS$}
+  \caption{Algorithme de construction de la symétrie du graphe $G$
+    codé avec FS/APS}
+  \label{algo:2symetrique}
+\end{algorithm}
+
+\end{document}
+

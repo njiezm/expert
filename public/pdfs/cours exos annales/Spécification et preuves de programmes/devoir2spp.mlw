@@ -1,0 +1,68 @@
+(* NOM : ZAMON PRENOM : N'jie*)
+
+module Devoir2SPP
+  use int.Int
+  use ref.Ref
+  use array.Array
+  use bool.Bool
+
+  (* Exercice 1 *)
+  let lemma verify_and (b1 b2: bool) : unit
+    ensures { (b1 = true /\ b2 = true <-> (b1 && b2) = true) }
+    ensures { (b1 = false \/ b2 = false <-> (b1 && b2) = false) }
+  = ()
+
+  (* Exercice 2 *)
+  let search (a: array int) (x: int) : int
+    ensures { (result = -1 <-> forall k. 0 <= k < a.length -> a[k] <> x) }
+    ensures { result <> -1 -> 0 <= result < a.length /\ a[result] = x }
+  =
+    let ref i = 0 in
+    let ref index = -1 in
+    while i < a.length && index = -1 do
+      variant { a.length - i }
+      invariant { 0 <= i <= a.length }
+      invariant { index <> -1 -> 0 <= index < i /\ a[index] = x }
+      invariant { index = -1 -> forall k. 0 <= k < i -> a[k] <> x }
+      if a[i] = x then index := i;
+      i := i + 1
+    done;
+    index
+
+  let minus (a b c: array int) : int
+    requires { c.length >= a.length }
+    ensures { 0 <= result <= a.length }
+    ensures { forall k. 0 <= k < result -> 
+                (exists m. 0 <= m < a.length /\ c[k] = a[m]) /\ 
+                (forall m. 0 <= m < b.length -> c[k] <> b[m]) }
+  =
+    let ref i = 0 in
+    for j = 0 to a.length - 1 do
+      invariant { 0 <= i <= j }
+      invariant { forall k. 0 <= k < i -> 
+                  (exists m. 0 <= m < j /\ c[k] = a[m]) /\
+                  (forall m. 0 <= m < b.length -> c[k] <> b[m]) }
+      if search b a[j] = -1 then begin
+        c[i] <- a[j];
+        i := i + 1
+      end
+    done;
+    i
+
+  (* Exercice 3 *)
+  type list 'a = Nil | Cons 'a (list 'a)
+
+  function length (l: list 'a) : int =
+    match l with | Nil -> 0 | Cons _ r -> 1 + length r end
+
+  function append (l1 l2: list 'a) : list 'a =
+    match l1 with | Nil -> l2 | Cons x r -> Cons x (append r l2) end
+
+  let rec lemma length_append_lemma (l m: list 'a) : unit
+    variant { l }
+    ensures { length (append l m) = length l + length m }
+  = match l with
+    | Nil -> ()
+    | Cons _ r -> length_append_lemma r m
+    end
+end
