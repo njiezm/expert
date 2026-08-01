@@ -14,7 +14,9 @@
 /.zed
 /auth.json
 /node_modules
-/public/build
+# public/build est volontairement versionné : l'hébergement mutualisé n'a pas Node,
+# les assets sont donc compilés en local puis déployés avec le code.
+# /public/build
 /public/fonts-manifest.dev.json
 /public/hot
 /public/storage
