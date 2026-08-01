@@ -136,13 +136,15 @@ matière.
 
 | Matière | Chapitres | Fiches | Cartes | Exercices | Examens blancs |
 |---|---|---|---|---|---|
-| ALO | 9 | 6 | 34 | 2 | 2 × 3 h |
-| EP | 7 | 4 | 24 | 1 | 2 × 2 h |
-| AGC | 7 | 4 | 25 | 2 | 2 × 3 h |
-| SPP | 10 | 11 | 44 | 4 | 2 × 3 h |
-| MIA | 10 | 5 | 30 | 3 | 2 × 2 h |
-| RIG | 4 | 4 | 12 | 3 | — |
-| **Total** | **47** | **34** | **169** | **15** | **10 examens, 200 points** |
+| ALO | 9 | 12 | 63 | 10 | 2 × 3 h |
+| EP | 7 | 7 | 36 | 7 | 2 × 2 h |
+| AGC | 7 | 8 | 42 | 7 | 2 × 3 h |
+| SPP | 10 | 11 | 44 | 10 | 2 × 3 h |
+| MIA | 10 | 11 | 53 | 10 | 2 × 2 h |
+| RIG | 4 | 4 | 12 | 4 | — |
+| **Total** | **47** | **53** | **250** | **48** | **10 examens, 200 points** |
+
+**Les 47 chapitres ont une fiche et au moins un exercice.** Aucun trou.
 
 Chaque examen blanc reprend la **durée réelle** de son épreuve et son format observé
 dans les annales. Toutes les questions portent une grille d'attendus.
