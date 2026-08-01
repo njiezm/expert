@@ -134,18 +134,22 @@ dans la copie.
 Le socle applicatif est complet et testé. Le contenu pédagogique se remplit matière par
 matière.
 
-| Matière | Chapitres | Fiches | Cartes | Exercices | Examen blanc |
+| Matière | Chapitres | Fiches | Cartes | Exercices | Examens blancs |
 |---|---|---|---|---|---|
-| ALO | 9 | 5 | 29 | 1 | 3 h · QCM + 3 conceptions |
-| EP | 7 | 3 | 18 | 1 | 2 h · Turing, décidabilité, complexité |
-| AGC | 7 | 3 | 19 | 1 | 3 h · graphes et prog. dynamique |
-| SPP | 10 | 10 | 36 | 3 | 3 h · formalisation et Hoare |
-| MIA | 10 | 4 | 23 | 2 | 2 h · Prolog, contraintes, recherche |
+| ALO | 9 | 6 | 34 | 2 | 2 × 3 h |
+| EP | 7 | 4 | 24 | 1 | 2 × 2 h |
+| AGC | 7 | 4 | 25 | 2 | 2 × 3 h |
+| SPP | 10 | 11 | 44 | 4 | 2 × 3 h |
+| MIA | 10 | 5 | 30 | 3 | 2 × 2 h |
 | RIG | 4 | 4 | 12 | 3 | — |
-| **Total** | **47** | **29** | **137** | **11** | **5 examens, 100 points** |
+| **Total** | **47** | **34** | **169** | **15** | **10 examens, 200 points** |
 
 Chaque examen blanc reprend la **durée réelle** de son épreuve et son format observé
 dans les annales. Toutes les questions portent une grille d'attendus.
+
+Deux examens par matière : le premier à **J−7**, le second à **J−2** — les deux
+créneaux que le moteur de planning réserve automatiquement. Les seconds sujets sont
+construits autour des erreurs réellement commises en session 1.
 
 ### Ce que l'analyse des annales ALO a changé
 
