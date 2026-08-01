@@ -42,6 +42,9 @@ class DatabaseSeeder extends Seeder
             DiagnosticApprofondiSeeder::class,
             DiagnosticApprofondi2Seeder::class,
             SecondsExamensBlancsSeeder::class,
+            ExercicesPoidsFortSeeder::class,
+            ExercicesAgcSppSeeder::class,
+            ExercicesRestantsSeeder::class,
             ActiverSchemasSeeder::class,
         ]);
     }
