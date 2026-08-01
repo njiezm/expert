@@ -113,7 +113,9 @@
             <section class="carte p-4">
                 <div class="flex items-center justify-between">
                     <h2 class="text-sm font-semibold texte-fort">Lacunes ouvertes</h2>
-                    <span class="text-xs tabulaire texte-faible">{{ $lacunes->count() }}/{{ $lacunes->count() + $lacunesFermees }}</span>
+                    <span class="text-xs tabulaire texte-faible">
+                        {{ $lacunes->count() }}/{{ $lacunes->count() + $lacunesFermees->count() }}
+                    </span>
                 </div>
 
                 @forelse ($lacunes->take(6) as $lacune)
@@ -124,7 +126,11 @@
                         @endif
                     </div>
                 @empty
-                    <p class="mt-2 text-xs texte-doux">Aucune lacune enregistrée pour cette matière.</p>
+                    <p class="mt-2 text-xs texte-doux">
+                        {{ $lacunesFermees->count()
+                            ? 'Toutes les lacunes de cette matière sont refermées.'
+                            : 'Aucune lacune enregistrée pour cette matière.' }}
+                    </p>
                 @endforelse
 
                 @if ($lacunes->count() > 6)
@@ -132,6 +138,43 @@
                        class="mt-3 block text-xs texte-doux hover:underline">
                         Voir les {{ $lacunes->count() }} lacunes →
                     </a>
+                @endif
+
+                {{-- Refermées : repliées, mais jamais hors de portée. Une lacune close
+                     par erreur doit pouvoir être rouverte sans passer par le diagnostic. --}}
+                @if ($lacunesFermees->count())
+                    <details class="mt-4 border-t bord pt-3">
+                        <summary class="cursor-pointer list-none text-xs texte-doux hover:underline">
+                            <span class="inline-flex items-center gap-1.5">
+                                <x-icone name="check" class="size-3.5" style="color: var(--color-acquis-fort)" />
+                                {{ $lacunesFermees->count() }} refermée{{ $lacunesFermees->count() > 1 ? 's' : '' }}
+                                — afficher pour rouvrir
+                            </span>
+                        </summary>
+
+                        <div class="mt-2.5 space-y-2">
+                            @foreach ($lacunesFermees as $lacune)
+                                <div class="flex items-start gap-2 border-l-2 pl-3"
+                                     style="border-color: var(--color-acquis)">
+                                    <div class="min-w-0 flex-1">
+                                        <p class="text-xs texte-doux">{{ $lacune->title }}</p>
+                                        @if ($lacune->resolved_at)
+                                            <p class="mt-0.5 text-[10px] texte-faible">
+                                                refermée le {{ $lacune->resolved_at->translatedFormat('j M à H\hi') }}
+                                            </p>
+                                        @endif
+                                    </div>
+                                    <form method="POST" action="{{ route('lacunes.statut', $lacune) }}" class="shrink-0">
+                                        @csrf
+                                        <input type="hidden" name="status" value="ouverte">
+                                        <button class="btn btn-fantome !px-2 !py-1 text-[11px]">
+                                            <x-icone name="refresh" class="size-3" /> Rouvrir
+                                        </button>
+                                    </form>
+                                </div>
+                            @endforeach
+                        </div>
+                    </details>
                 @endif
             </section>
 

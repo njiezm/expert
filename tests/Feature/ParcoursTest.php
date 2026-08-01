@@ -269,6 +269,35 @@ class ParcoursTest extends TestCase
             ->assertSee('correction partielle', false);
     }
 
+    public function test_une_lacune_refermee_reste_visible_et_se_rouvre(): void
+    {
+        $lacune = \App\Models\Gap::create([
+            'subject_id' => $this->subject->id,
+            'chapter_id' => $this->chapter->id,
+            'kind' => 'contenu',
+            'title' => 'Condition nécessaire confondue avec condition suffisante',
+            'evidence' => 'faux, choisir, pas équivalent',
+            'severity' => 5,
+        ]);
+
+        // On la referme.
+        $this->post(route('lacunes.statut', $lacune), ['status' => 'maitrisee'])->assertRedirect();
+        $lacune->refresh();
+        $this->assertSame('maitrisee', $lacune->status);
+        $this->assertNotNull($lacune->resolved_at);
+
+        // Elle doit rester atteignable depuis la matière comme depuis le diagnostic,
+        // avec le bouton de réouverture — sinon elle est perdue pour l'utilisateur.
+        $this->get(route('matieres.show', $this->subject))->assertOk()->assertSee('Rouvrir');
+        $this->get(route('diagnostic.show', $this->subject))->assertOk()->assertSee('Rouvrir');
+
+        // Et la réouverture doit effacer la date de résolution.
+        $this->post(route('lacunes.statut', $lacune), ['status' => 'ouverte'])->assertRedirect();
+        $lacune->refresh();
+        $this->assertSame('ouverte', $lacune->status);
+        $this->assertNull($lacune->resolved_at);
+    }
+
     public function test_la_connexion_est_requise(): void
     {
         auth()->logout();

@@ -21,7 +21,12 @@ class MatiereController extends Controller
         return view('matieres.show', [
             'subject' => $subject,
             'lacunes' => $subject->gaps()->with('chapter')->open()->get(),
-            'lacunesFermees' => $subject->gaps()->where('status', 'maitrisee')->count(),
+            // Les lacunes refermées restent accessibles : une lacune close par erreur,
+            // ou rouverte parce qu'elle n'a pas tenu, doit pouvoir être retrouvée ici.
+            'lacunesFermees' => $subject->gaps()->with('chapter')
+                ->where('status', 'maitrisee')
+                ->latest('resolved_at')
+                ->get(),
             'ressources' => $subject->resources()
                 ->orderBy('kind')->orderBy('title')
                 ->get()

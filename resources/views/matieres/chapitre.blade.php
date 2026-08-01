@@ -57,13 +57,14 @@
                                             </p>
                                         @endif
                                     </div>
+                                    @php $fermee = $lacune->status === 'maitrisee'; @endphp
                                     <form method="POST" action="{{ route('lacunes.statut', $lacune) }}" class="shrink-0">
                                         @csrf
-                                        <input type="hidden" name="status"
-                                               value="{{ $lacune->status === 'maitrisee' ? 'ouverte' : 'maitrisee' }}">
-                                        <button class="btn btn-fantome !px-2 !py-1" title="Basculer le statut">
-                                            <x-icone name="check" class="size-3.5"
-                                                     style="color: {{ $lacune->status === 'maitrisee' ? 'var(--color-acquis-fort)' : 'inherit' }}" />
+                                        <input type="hidden" name="status" value="{{ $fermee ? 'ouverte' : 'maitrisee' }}">
+                                        <button class="btn btn-fantome whitespace-nowrap text-xs"
+                                                @if ($fermee) style="border-color: var(--color-acquis); color: var(--color-acquis-fort)" @endif>
+                                            <x-icone :name="$fermee ? 'refresh' : 'check'" class="size-3.5" />
+                                            {{ $fermee ? 'Rouvrir' : 'Refermer' }}
                                         </button>
                                     </form>
                                 </div>
