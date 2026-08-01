@@ -29,8 +29,16 @@ class BibliothequeController extends Controller
             });
         }
 
+        // Tri pédagogique plutôt qu'alphabétique : le cours avant les exercices,
+        // les corrigés et les copies en dernier. Écrit en CASE plutôt qu'avec
+        // array_position(), absent des PostgreSQL antérieurs à la 9.5.
+        $ordreKinds = "case kind
+            when 'cours' then 1 when 'td' then 2 when 'exercice' then 3
+            when 'devoir' then 4 when 'annale' then 5 when 'copie' then 6
+            else 7 end";
+
         $resources = $query->orderBy('subject_id')
-            ->orderByRaw("array_position(array['cours','td','exercice','devoir','annale','copie','annexe']::text[], kind)")
+            ->orderByRaw($ordreKinds)
             ->orderBy('title')
             ->paginate(40)
             ->withQueryString();
