@@ -37,6 +37,8 @@ class DatabaseSeeder extends Seeder
             SppContentSeeder2::class,
             CoursSppSeeder::class,
             MiaSocleSeeder::class,
+            CoursMiaSeeder::class,
+            CoursMia2Seeder::class,
             MiaContentSeeder::class,
             AgcContentSeeder::class,
             EpContentSeeder::class,
