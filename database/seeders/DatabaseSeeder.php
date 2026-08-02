@@ -43,6 +43,8 @@ class DatabaseSeeder extends Seeder
             CoursAgcSeeder::class,
             CoursAgc2Seeder::class,
             AgcContentSeeder::class,
+            CoursEpSeeder::class,
+            CoursEp2Seeder::class,
             EpContentSeeder::class,
             AgcEpSocleSeeder::class,
             DiagnosticApprofondiSeeder::class,
