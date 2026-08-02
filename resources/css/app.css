@@ -480,6 +480,140 @@ html.mode-nuit-profonde {
         box-shadow: inset 3px 0 0 var(--accent);
         transition: box-shadow 0.2s;
     }
+
+    /* ---- Suivi mot à mot ------------------------------------------------
+       Deux échelles : une bande claire sur le paragraphe courant, pour savoir
+       d'un coup d'œil où l'on est dans la page, et le mot prononcé lui-même.
+       Sans la bande, on retrouve le mot mais on perd le fil. */
+
+    .voix-bloc-actif {
+        background: color-mix(in oklab, var(--accent) 7%, transparent);
+        border-radius: 4px;
+        box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 7%, transparent);
+        transition: background 0.25s;
+    }
+
+    .voix-mot-actif {
+        background: var(--accent);
+        color: var(--accent-contraste);
+        border-radius: 3px;
+        box-shadow: 0 0 0 1.5px var(--accent);
+        transition: background 0.08s linear;
+    }
+
+    /* Dans un bloc de code, le fond opaque écraserait la colorisation :
+       on souligne plutôt. */
+    pre .voix-mot-actif {
+        background: color-mix(in oklab, var(--accent) 22%, transparent);
+        color: inherit;
+        box-shadow: none;
+        border-bottom: 2px solid var(--accent);
+    }
+
+    /* ---- Barre de commande flottante ------------------------------------ */
+
+    .voix-barre {
+        position: fixed;
+        left: 50%;
+        bottom: 1.25rem;
+        z-index: 60;
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.65rem;
+        border: 1px solid var(--bordure);
+        border-radius: 999px;
+        background: var(--surface-haute);
+        box-shadow: 0 10px 30px -8px rgb(0 0 0 / 0.35), 0 2px 6px -2px rgb(0 0 0 / 0.2);
+        transform: translateX(-50%) translateY(0.75rem);
+        opacity: 0;
+        transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .voix-barre-visible {
+        display: flex;
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    .voix-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.3rem 0.6rem;
+        border: 1px solid var(--bordure);
+        border-radius: 999px;
+        background: transparent;
+        color: var(--texte-doux);
+        font-size: 11px;
+        font-weight: 500;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+
+    .voix-btn:hover {
+        color: var(--texte-fort);
+        border-color: var(--accent);
+    }
+
+    .voix-btn-primaire {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--accent-contraste);
+        min-width: 5.75rem;
+        justify-content: center;
+    }
+
+    .voix-btn-primaire:hover {
+        background: var(--accent-survol);
+        border-color: var(--accent-survol);
+        color: var(--accent-contraste);
+    }
+
+    /* En pause, le bouton cesse de crier : c'est « reprendre » qu'on cherche. */
+    .voix-barre-pause .voix-btn-primaire {
+        background: transparent;
+        color: var(--accent);
+    }
+
+    .voix-jauge {
+        width: 7rem;
+        height: 4px;
+        border-radius: 999px;
+        background: var(--bordure);
+        overflow: hidden;
+    }
+
+    .voix-jauge > div {
+        height: 100%;
+        width: 0;
+        border-radius: 999px;
+        background: var(--accent);
+        transition: width 0.25s linear;
+    }
+
+    .voix-compte {
+        min-width: 2.75rem;
+        color: var(--texte-faible);
+        font-size: 10px;
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+    }
+
+    .voix-select {
+        padding: 0.25rem 0.3rem;
+        border: 1px solid var(--bordure);
+        border-radius: 6px;
+        background: transparent;
+        color: var(--texte-doux);
+        font-size: 10px;
+    }
+
+    @media (max-width: 40rem) {
+        .voix-jauge,
+        .voix-compte { display: none; }
+    }
 }
 
 @layer utilities {
