@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             GapSeeder::class,
             RigueurContentSeeder::class,
             AloSocleSeeder::class,
+            CoursAloSeeder::class,
             AloContentSeeder::class,
             AloExercicesSeeder::class,
             SppContentSeeder::class,

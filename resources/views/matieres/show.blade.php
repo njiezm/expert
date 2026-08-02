@@ -37,6 +37,13 @@
             </div>
 
             <div class="flex flex-wrap gap-2">
+                @if ($seancesTotal > 0)
+                    <a href="{{ route('cours-suivi.index', $subject) }}" class="btn btn-accent">
+                        <x-icone name="book" class="size-4" />
+                        {{ $seancesSuivies ? 'Reprendre le cours' : 'Suivre le cours' }}
+                        <span class="text-[11px] opacity-75">{{ $seancesSuivies }}/{{ $seancesTotal }}</span>
+                    </a>
+                @endif
                 @if ($cartesDues > 0)
                     <a href="{{ route('drill.session', ['matiere' => $subject->id]) }}" class="btn btn-accent">
                         <x-icone name="layers" class="size-4" /> Drill · {{ $cartesDues }}

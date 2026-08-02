@@ -26,6 +26,18 @@ class Subject extends Model
         return $this->hasMany(Chapter::class)->orderBy('position');
     }
 
+    /**
+     * Les séances du cours suivi.
+     *
+     * Nécessaire au-delà du confort : la route imbriquée
+     * `/matieres/{subject:slug}/cours/suivre/{seance:slug}` amène Laravel à
+     * restreindre la séance au sujet parent, ce qu'il fait via cette relation.
+     */
+    public function seances(): HasMany
+    {
+        return $this->hasMany(Seance::class)->orderBy('position');
+    }
+
     public function resources(): HasMany
     {
         return $this->hasMany(Resource::class)->orderBy('position');

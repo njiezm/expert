@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BibliothequeController;
+use App\Http\Controllers\CoursSuiviController;
 use App\Http\Controllers\DiagnosticController;
 use App\Http\Controllers\DrillController;
 use App\Http\Controllers\ExamenBlancController;
@@ -31,6 +32,12 @@ Route::middleware('auth')->group(function () {
     /* ---------------- Matières et chapitres ---------------- */
     Route::get('/matieres/{subject:slug}', [MatiereController::class, 'show'])->name('matieres.show');
     Route::get('/matieres/{subject:slug}/{chapter:slug}', [MatiereController::class, 'chapter'])->name('chapitres.show');
+
+    /* ---------------- Suivre le cours ---------------- */
+    Route::get('/matieres/{subject:slug}/cours/suivre', [CoursSuiviController::class, 'index'])->name('cours-suivi.index');
+    Route::get('/matieres/{subject:slug}/cours/suivre/{seance:slug}', [CoursSuiviController::class, 'show'])->name('cours-suivi.show');
+    Route::post('/matieres/{subject:slug}/cours/suivre/{seance:slug}/termine', [CoursSuiviController::class, 'terminer'])->name('cours-suivi.terminer');
+    Route::post('/matieres/{subject:slug}/cours/suivre/{seance:slug}/reprendre', [CoursSuiviController::class, 'reprendre'])->name('cours-suivi.reprendre');
 
     /* ---------------- Cours digestes ---------------- */
     Route::get('/cours/{lesson}', [LessonController::class, 'show'])->name('cours.show');

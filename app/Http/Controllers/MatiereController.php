@@ -32,6 +32,8 @@ class MatiereController extends Controller
                 ->get()
                 ->groupBy('kind'),
             'cartesDues' => $srs->dueCountBySubject()[$subject->id] ?? 0,
+            'seancesTotal' => \App\Models\Seance::where('subject_id', $subject->id)->count(),
+            'seancesSuivies' => count(\App\Models\Seance::suiviesPour($subject->id)),
         ]);
     }
 

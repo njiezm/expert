@@ -298,6 +298,50 @@ class ParcoursTest extends TestCase
         $this->assertNull($lacune->resolved_at);
     }
 
+    public function test_le_cours_suivi_se_parcourt_dans_l_ordre(): void
+    {
+        foreach ([1, 2, 3] as $i) {
+            \App\Models\Seance::create([
+                'subject_id' => $this->subject->id,
+                'chapter_id' => $this->chapter->id,
+                'position' => $i,
+                'title' => "Séance numéro {$i}",
+                'slug' => "seance-numero-{$i}",
+                'intro' => "Aujourd'hui on va voir la notion {$i}.",
+                'body' => "Le corps du cours de la séance {$i}.",
+                'recap' => "Ce qu'il faut retenir de la séance {$i}.",
+                'duree_min' => 20,
+            ]);
+        }
+
+        $premiere = \App\Models\Seance::where('position', 1)->firstOrFail();
+        $deuxieme = \App\Models\Seance::where('position', 2)->firstOrFail();
+
+        // Le sommaire propose de commencer par la première.
+        $this->get(route('cours-suivi.index', $this->subject))
+            ->assertOk()
+            ->assertSee('Séance numéro 1')
+            ->assertSee('Séance numéro 3')
+            ->assertSee('Commencer');
+
+        $this->get(route('cours-suivi.show', [$this->subject, $premiere]))
+            ->assertOk()
+            ->assertSee('Le corps du cours de la séance 1');
+
+        // Terminer une séance enchaîne sur la suivante.
+        $this->post(route('cours-suivi.terminer', [$this->subject, $premiere]))
+            ->assertRedirect(route('cours-suivi.show', [$this->subject, $deuxieme]));
+
+        $this->assertDatabaseHas('study_events', ['kind' => 'seance_suivie']);
+        $this->assertSame([$premiere->id], \App\Models\Seance::suiviesPour($this->subject->id));
+
+        // Et l'on peut la rouvrir pour la revoir.
+        $this->post(route('cours-suivi.reprendre', [$this->subject, $premiere]))
+            ->assertRedirect(route('cours-suivi.show', [$this->subject, $premiere]));
+
+        $this->assertSame([], \App\Models\Seance::suiviesPour($this->subject->id));
+    }
+
     public function test_la_connexion_est_requise(): void
     {
         auth()->logout();
