@@ -40,6 +40,8 @@ class DatabaseSeeder extends Seeder
             CoursMiaSeeder::class,
             CoursMia2Seeder::class,
             MiaContentSeeder::class,
+            CoursAgcSeeder::class,
+            CoursAgc2Seeder::class,
             AgcContentSeeder::class,
             EpContentSeeder::class,
             AgcEpSocleSeeder::class,
